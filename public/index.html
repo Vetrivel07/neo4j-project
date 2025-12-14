@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>iSchool Neo4j Project with D3</title>
+  <script src="assets/js/d3.v7.min.js" defer></script>
+  <script src="assets/js/graph.js" defer></script>
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+
+<body>
+  <svg></svg>
+  <input name="cypher-query" placeholder="Cypher Query" id="cypher-query"
+    value="MATCH (s:Series)<-[r1:PART_OF_SERIES]-(b:Book)-[r2:AUTHORED_BY]->(a:Author) WHERE a.name = 'Stan Lee' AND b.average_rating> 4 AND s.series_works_count<5 RETURN  s, r1, b, r2, a;">
+  <input type="button" value="Run Query" id="query-btn">
+
+  <button id="legend-toggle">Legend</button>
+  <button id="queries-toggle">Queries</button>
+
+  <!-- Sliding legend panel -->
+  <div id="legend-panel">
+    <h3 class="legend-title">Data Information</h3>
+    <h3>Nodes</h3>
+    
+    <div class="legend-chips">
+      <span class="legend-chip author">Author</span>
+      <span class="legend-chip book">Book</span>
+      <span class="legend-chip genre">Genre</span>
+      <span class="legend-chip review">Review</span>
+      <span class="legend-chip series">Series</span>
+      <span class="legend-chip user">User</span>
+      <span class="legend-chip work">Work</span>
+    </div>
+
+    <h3 class="legend-subtitle">Relationships</h3>
+    <div class="rel-chips">
+      <span class="rel-chip" title="Book was written by this Author">AUTHORED_BY</span>
+      <span class="rel-chip" title="This Book is a version of the referenced Work">EDITION_OF</span>
+      <span class="rel-chip" title="Book belongs to this Genre">HAS_GENRE</span>
+      <span class="rel-chip" title="Book belongs to this Series">PART_OF_SERIES</span>
+      <span class="rel-chip" title="User gave a rating to this Book">RATED</span>
+      <span class="rel-chip" title="User has read this Book">READ</span>
+      <span class="rel-chip" title="User wrote a Review for a Book">REVIEWS</span>
+      <span class="rel-chip" title="Two or more Books share similar content/metadata">SIMILAR_TO</span>
+      <span class="rel-chip" title="User wrote this Review">WROTE_REVIEW</span>
+    </div>
+
+
+  </div>
+
+  <!-- Queries panel -->
+  <div id="queries-panel">
+  <h3>Cypher Queries</h3>
+  <h3 class="queries-title">Try Out the Sample Queries Listed Below</h3>
+
+  <div class="queries-list">
+
+    <!-- 1 -->
+    <div class="query-item">
+      <div class="query-header">
+        <button class="query-btn"
+                data-query="MATCH (s:Series)<-[r1:PART_OF_SERIES]-(b:Book)-[r2:AUTHORED_BY]->(a:Author) WHERE a.name = 'Stan Lee' AND b.average_rating> 4 AND s.series_works_count<5 RETURN  s, r1, b, r2, a;">
+          1. Series → Book → Author
+        </button>
+        <button class="query-toggle" aria-label="Show Cypher">▼</button>
+      </div>
+      <textarea class="query-code" spellcheck="false"></textarea>
+    </div>
+
+    <!-- 2 -->
+    <div class="query-item">
+      <div class="query-header">
+        <button class="query-btn"
+                data-query="MATCH  (w:Work)<-[r1:EDITION_OF]-(b:Book)-[r2:PART_OF_SERIES]->(s:Series) WHERE b.publication_year = 2018 RETURN w, r1, b, r2, s;">
+          2. Work → Book → Series
+        </button>
+        <button class="query-toggle" aria-label="Show Cypher">▼</button>
+      </div>
+      <textarea class="query-code" spellcheck="false"></textarea>
+    </div>
+
+    <!-- 3 -->
+    <div class="query-item">
+      <div class="query-header">
+        <button class="query-btn"
+                data-query="MATCH (g:Genre {name: 'fiction'})<-[r1:HAS_GENRE]-(b:Book) MATCH (b)-[r2:AUTHORED_BY]->(a:Author) WHERE size(b.author_ids) = 1 and size(b.similar_book_ids) = 1 and b.is_ebook = 'true' RETURN g, r1, b, r2, a;">
+          3. Genre → Book → Author
+        </button>
+        <button class="query-toggle" aria-label="Show Cypher">▼</button>
+      </div>
+      <textarea class="query-code" spellcheck="false"></textarea>
+    </div>
+
+    <!-- 4 -->
+    <div class="query-item">
+      <div class="query-header">
+        <button class="query-btn"
+                data-query="MATCH (b:Book)-[r1:SIMILAR_TO]->(b2:Book) MATCH (b)-[r2:AUTHORED_BY]->(a:Author) MATCH (b2)-[r3:AUTHORED_BY]->(a) WHERE b2.publisher = 'Marvel' and size(b2.author_ids) = 1 RETURN b,r1, b2,r2,a, r3;">
+          4. Book → Similar Book → Author
+        </button>
+        <button class="query-toggle" aria-label="Show Cypher">▼</button>
+      </div>
+    <textarea class="query-code" spellcheck="false"></textarea>
+    </div>
+
+    <!-- 5 -->
+    <div class="query-item">
+      <div class="query-header">
+        <button class="query-btn"
+                data-query="MATCH (s:Series)<-[r1:PART_OF_SERIES]-(b:Book)-[r2:HAS_GENRE]->(g:Genre) WHERE any(gn IN b.genre_names WHERE any(token IN split(toLower(gn), ',') WHERE trim(token) = 'comics')) and b.publisher = 'Marvel' AND b.publication_year=2003 RETURN DISTINCT s, r1, b, r2, g;">
+          5. Series → Book → Genre → Book → Series
+        </button>
+        <button class="query-toggle" aria-label="Show Cypher">▼</button>
+      </div>
+      <textarea class="query-code" spellcheck="false"></textarea>
+    </div>
+
+    <!-- 6 -->
+    <div class="query-item">
+      <div class="query-header">
+        <button class="query-btn"
+                data-query="MATCH (s:Series)-[r1:PART_OF_SERIES]-(b:Book)-[r3:AUTHORED_BY]-(a:Author) WHERE a.name = 'Stan Lee' AND b.title =~ '.*Captain America.*' AND b.publisher = 'Marvel' AND b.average_rating >= 4 OPTIONAL MATCH (b)-[rGenre:HAS_GENRE]->(g:Genre) OPTIONAL MATCH (b)-[rSim:SIMILAR_TO]->(bSim:Book) RETURN s, r1, b, r3, a, g, rGenre, bSim, rSim;">
+          6. Series → Book → Author → Genre & Similar Books
+        </button>
+        <button class="query-toggle" aria-label="Show Cypher">▼</button>
+      </div>
+      <textarea class="query-code" spellcheck="false"></textarea>
+    </div>
+
+  </div>
+  <div class="queries-instructions">
+    <strong>How to use:</strong>
+    <ul>
+      <li>Click the query row to load it into the main query box.</li>
+      <li>Click the arrow ▼ to expand and edit the query.</li>
+      <li>After editing, click the query row again to rerun it.</li>
+    </ul>
+  </div>
+
+</div>
+
+  <div id="focus-controls">
+    <button id="focus-in-btn" class="focus-btn" title="Keep graph in view">
+      Focus in
+    </button>
+    <button id="focus-free-btn" class="focus-btn" title="Let graph flow freely">
+      Free
+    </button>
+  </div>
+
+</body>

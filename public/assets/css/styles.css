@@ -1,0 +1,375 @@
+body { 
+  margin: 0; 
+  overflow: hidden; 
+}
+svg { 
+  width: 100vw; 
+  height: 100vh; 
+}
+circle { 
+  stroke: #fff; 
+  stroke-width: 1.5px;
+}
+line { 
+  stroke: #999; 
+  stroke-opacity: 0.6; 
+}
+text {
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  font-size: 1rem;
+}
+input {
+  position: fixed;
+  top: 0;
+  padding: .5em;
+}
+input#cypher-query {
+  left: 0;
+  width: calc( 100vw - 100px );
+}
+input#query-btn {
+  right: 0;
+  width: 100px;
+}
+
+.link-labels text {
+  font-family: Arial, sans-serif;
+  font-size: 6px;
+  fill: #777;
+  user-select: none;
+}
+
+/* 
+label colors
+*/
+.Book {
+  fill: #6e2ddd;
+}
+
+.Author {
+  fill: #31b3eb;
+}
+
+.Series {
+  fill: #dc91ff;
+}
+
+.Genre {
+  fill: #6589c4;
+}
+
+.User {
+  fill: #5be060;
+}
+
+.Review {
+  fill: #126b30;
+}
+
+.Work {
+  fill: #4a377e;
+}
+
+.Book.Author {
+  stroke-width: 3px;
+}
+
+/*
+Legend button + side panel
+*/
+
+#legend-toggle {
+  position: fixed;
+  top: 40px;   
+  right: 10px;
+  padding: 0.4em 0.8em;
+  font-size: 0.9rem;
+  border: 1px solid #ccc;
+  background: #f8f8f8;
+  cursor: pointer;
+  z-index: 20;
+  border-radius: 10px;
+  transition: background-color 0.35s ease;
+}
+
+#legend-panel {
+  position: fixed;
+  top: 32px;
+  right: 0;
+  height: calc(100vh - 32px);
+  width: 220px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: -2px 0 6px rgba(0, 0, 0, 0.15);
+  padding: 2.75rem 1rem;
+  transform: translateX(100%);
+  transition: transform 0.25s ease-out;
+  z-index: 15;
+  font-size: 0.9rem;
+}
+
+#legend-panel.open {
+  transform: translateX(0);
+}
+
+#legend-panel h3 {
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+  font-size: 1rem;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.4rem;
+}
+
+.legend-color {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  margin-right: 0.5rem;
+  border: 1px solid #ccc;
+}
+
+.legend-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.legend-chip {
+  display: inline-block;
+  padding: 0.45rem 0.7rem;
+  border-radius: 9999px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #ffffff;
+  white-space: nowrap;
+}
+
+.legend-chip.genre  { background: #6589c4; }
+.legend-chip.book   { background: #6e2ddd; }
+.legend-chip.series { background: #dc91ff; }
+.legend-chip.author { background: #31b3eb; }
+.legend-chip.user   { background: #5be060; }
+.legend-chip.review { background: #126b30; }
+.legend-chip.work   { background: #4a377e; }
+
+/*
+Relationship legend chips 
+*/
+
+#legend-panel h3.legend-subtitle {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.rel-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+
+.rel-chip {
+  display: inline-block;
+  padding: 0.45rem 0.7rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: #ccc;
+  color: #333;
+  border: 1px solid #ccc;
+  white-space: nowrap;
+  transition: background-color 0.35s ease;
+}
+
+.rel-chip:hover {
+  background: #e7e7e7;
+  cursor: help;
+}
+
+
+/*
+Queries button + side panel
+*/
+
+#queries-toggle {
+  position: fixed;
+  top: 40px;
+  right: 90px;
+  padding: 0.4em 0.8em;
+  font-size: 0.9rem;
+  border: 1px solid #ccc;
+  background: #f8f8f8;
+  cursor: pointer;
+  z-index: 20;
+  border-radius: 10px;
+  transition: background-color 0.25s ease;
+}
+
+/* 
+Sliding queries panel
+*/
+#queries-panel {
+  position: fixed;
+  top: 32px;
+  right: 0;
+  height: calc(100vh - 32px);
+  width: 260px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: -2px 0 6px rgba(0, 0, 0, 0.15);
+  padding: 2.75rem 1rem;
+  transform: translateX(100%);
+  transition: transform 0.25s ease-out;
+  z-index: 15;
+  font-size: 0.9rem;
+
+  display: flex;
+  flex-direction: column;
+}
+
+#queries-toggle:hover, #legend-toggle:hover{
+  background-color: #e7e7e7;
+}
+
+#queries-panel.open {
+  transform: translateX(0);
+}
+
+#queries-panel h3 {
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+  font-size: 1rem;
+}
+
+.queries-title, .legend-title {
+  margin: 0 0 0.6rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.queries-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+
+  flex: 1;
+}
+
+.query-btn {
+  width: 100%;
+  text-align: left;
+  padding: 0.35rem 0.5rem;
+  font-size: 0.8rem;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  background: #f4f4f4;
+  cursor: pointer;
+}
+
+.query-btn:hover {
+  background: #e7e7e7;
+}
+
+.query-item {
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  background: #f4f4f4;
+  margin-bottom: 0.4rem;
+  overflow: hidden;
+}
+
+.query-header {
+  display: flex;
+  align-items: stretch;
+}
+
+.query-header .query-btn {
+  flex: 1;
+  border: none;
+  border-radius: 0;
+  border-right: 1px solid #ddd;
+  background: transparent;
+}
+
+.query-toggle {
+  width: 32px;
+  border: none;
+  background: #eee;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.query-item.open .query-toggle {
+  background: #e0e0e0;
+  transform: rotate(180deg);
+}
+
+.query-code {
+  display: none;
+  width: 100%;
+  min-height: 3.5rem;
+  padding: 0.35rem 0.5rem;
+  font-family: monospace;
+  font-size: 0.7rem;
+  background: #ffffff;
+  border: none;
+  border-top: 1px solid #ddd;
+  resize: vertical;
+  box-sizing: border-box;
+}
+
+/* show when item is open */
+.query-item.open .query-code {
+  display: block;
+}
+
+
+.queries-instructions {
+  padding: 0.75rem;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+  background: #fafafa;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  color: #202020;
+}
+
+.queries-instructions ul {
+  margin: 0.3rem 0 0 1rem;
+  padding: 0;
+}
+
+.queries-instructions li {
+  margin-bottom: 0.25rem;
+}
+
+/* 
+focus controls
+*/
+#focus-controls {
+  position: fixed;
+  left: 12px;
+  bottom: 12px;
+  display: flex;
+  gap: 4px;
+  z-index: 30;
+}
+
+.focus-btn {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  border-radius: 9999px;
+  border: 1px solid #ccc;
+  background: #f8f8f8;
+  cursor: pointer;
+}
+
+.focus-btn.focus-active {
+  background: #e0f0ff;
+  border-color: #5b8bd8;
+  font-weight: 600;
+}
