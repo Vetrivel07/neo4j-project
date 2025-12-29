@@ -16,6 +16,11 @@ For this project, we selected the <a href="https://cseweb.ucsd.edu/~jmcauley/dat
 
 This project models Goodreads Comics & Graphic Novel data as a graph to explore complex relationships between books, users, authors, series, and reviews. A graph database was chosen to reveal hidden patterns in reading behavior, content similarity, and author influence. 
 
+Direct link to download: 
+- Genre Subset: <a href="https://mcauleylab.ucsd.edu/public_datasets/gdrive/goodreads/byGenre/goodreads_books_comics_graphic.json.gz">goodreads_books_comics_graphic.json.gz</a>, <a href="https://mcauleylab.ucsd.edu/public_datasets/gdrive/goodreads/byGenre/goodreads_interactions_comics_graphic.json.gz">goodreads_interactions_comics_graphic.json.gz</a>, <a href="https://mcauleylab.ucsd.edu/public_datasets/gdrive/goodreads/byGenre/goodreads_reviews_comics_graphic.json.gz">goodreads_reviews_comics_graphic.json.gz</a>
+- Meta-data: <a href="https://mcauleylab.ucsd.edu/public_datasets/gdrive/goodreads/goodreads_book_authors.json.gz">goodreads_book_authors.json.gz</a>, <a href="https://mcauleylab.ucsd.edu/public_datasets/gdrive/goodreads/goodreads_book_works.json.gz">goodreads_book_works.json.gz</a>, <a href="https://mcauleylab.ucsd.edu/public_datasets/gdrive/goodreads/goodreads_book_series.json.gz">goodreads_book_series.json.gz</a>, <a href="https://mcauleylab.ucsd.edu/public_datasets/gdrive/goodreads/goodreads_book_genres_initial.json.gz">goodreads_book_genres_initial.json.gz</a>
+
+
 We chose this dataset because:
 
 - Comics often have **multiple authors, genres, editions, and user interactions**, making Neo4j the ideal database to represent these relationships.
