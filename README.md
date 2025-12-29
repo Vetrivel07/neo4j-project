@@ -5,7 +5,7 @@
 
 # 📚 1. Data Choice
 
-For this project, we selected the **Goodreads Comics & Graphic Novels dataset**, which provides a rich, highly connected structure ideal for graph modeling. The dataset includes relationships between:
+For this project, we selected the <a href="https://cseweb.ucsd.edu/~jmcauley/datasets/goodreads.html">**Goodreads Comics & Graphic Novels dataset**</a>, which provides a rich, highly connected structure ideal for graph modeling. The dataset includes relationships between:
 
 - Books  
 - Authors  
